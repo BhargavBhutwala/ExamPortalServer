@@ -1,27 +1,17 @@
 package com.exam.examserver;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-import com.exam.examserver.entity.Role;
-import com.exam.examserver.entity.User;
-import com.exam.examserver.entity.UserRole;
-import com.exam.examserver.service.UserService;
 
 @SpringBootApplication
 public class ExamserverApplication implements CommandLineRunner{
 
-	@Autowired
-	private UserService userService;
+	// @Autowired
+	// private UserService userService;
 
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	// @Autowired
+	// private BCryptPasswordEncoder encoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ExamserverApplication.class, args);
