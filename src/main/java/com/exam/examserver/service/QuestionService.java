@@ -17,4 +17,6 @@ public interface QuestionService {
 
     public Set<Question> getQuestionsOfQuiz(Quiz quiz);
 
+    public void deleteQuestion(long id);
+
 }
