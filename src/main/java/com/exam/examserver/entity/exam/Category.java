@@ -3,7 +3,7 @@ package com.exam.examserver.entity.exam;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +29,7 @@ public class Category {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "category", fetch = FetchType.EAGER)
-    @JsonManagedReference
+    @JsonIgnoreProperties("category")
     private Set<Quiz> quizzes = new LinkedHashSet<>();
 
     public Category() {
