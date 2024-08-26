@@ -1,6 +1,6 @@
 package com.exam.examserver.entity.exam;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -40,7 +40,7 @@ public class Question {
     private String answer;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JsonBackReference
+    @JsonIgnoreProperties("questions")
     private Quiz quiz;
 
     public Question() {
