@@ -70,6 +70,12 @@ public class QuestionController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @GetMapping("/quiz/all/{quizId}")
+    public ResponseEntity<?> getQuestionsOfQuizAdmin(@PathVariable("quizId") long quizId){
+        Quiz quiz = this.quizService.getQuiz(quizId);
+        return new ResponseEntity<>(this.questionService.getQuestionsOfQuiz(quiz), HttpStatus.OK);
+    }
+
     //delete a question by id
     @DeleteMapping("/{questionId}")
     public void deleteQuestion(@PathVariable("questionId") long questionId){
