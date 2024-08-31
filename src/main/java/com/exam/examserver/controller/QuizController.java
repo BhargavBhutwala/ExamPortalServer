@@ -1,5 +1,7 @@
 package com.exam.examserver.controller;
 
+import java.util.Set;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.exam.examserver.entity.exam.Question;
 import com.exam.examserver.entity.exam.Quiz;
 import com.exam.examserver.service.QuizService;
 
@@ -33,7 +36,50 @@ public class QuizController {
     //update the quiz
     @PutMapping("/")
     public ResponseEntity<Quiz> updateQuiz(@RequestBody Quiz quiz){
-        return new ResponseEntity<>(this.quizService.updateQuiz(quiz), HttpStatus.OK);
+        
+        //return new ResponseEntity<>(this.quizService.updateQuiz(quiz), HttpStatus.OK);
+        // Fetch the existing quiz from the database
+        Quiz existingQuiz = this.quizService.getQuiz(quiz.getqId());
+
+        // If the quiz is not found, return a 404 response
+        if (existingQuiz == null) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        // Update the existing quiz details
+        existingQuiz.setTitle(quiz.getTitle());
+        existingQuiz.setDescription(quiz.getDescription());
+        existingQuiz.setMaxMarks(quiz.getMaxMarks());
+        existingQuiz.setNumberOfQuestions(quiz.getNumberOfQuestions());
+        existingQuiz.setActive(quiz.isActive());
+        existingQuiz.setCategory(quiz.getCategory());
+
+        // Merge and update the questions
+        Set<Question> updatedQuestions = quiz.getQuestions();
+        Set<Question> existingQuestions = existingQuiz.getQuestions();
+
+        for (Question updatedQuestion : updatedQuestions) {
+            if (updatedQuestion.getQuestionId() == 0) {
+                // New question, add it
+                updatedQuestion.setQuiz(existingQuiz);
+                existingQuestions.add(updatedQuestion);
+            } else {
+                // Existing question, find and update
+                for (Question existingQuestion : existingQuestions) {
+                    if (existingQuestion.getQuestionId() == updatedQuestion.getQuestionId()) {
+                        existingQuestion.setContent(updatedQuestion.getContent());
+                        existingQuestion.setOption1(updatedQuestion.getOption1());
+                        existingQuestion.setOption2(updatedQuestion.getOption2());
+                        existingQuestion.setOption3(updatedQuestion.getOption3());
+                        existingQuestion.setOption4(updatedQuestion.getOption4());
+                        existingQuestion.setAnswer(updatedQuestion.getAnswer());
+                    }
+                }
+            }
+        }
+
+        // Save the updated quiz
+        return new ResponseEntity<>(this.quizService.updateQuiz(existingQuiz), HttpStatus.OK);
     }
 
     //get all quizzes
