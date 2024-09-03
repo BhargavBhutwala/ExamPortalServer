@@ -111,4 +111,15 @@ public class QuizController {
         Optional<Category> category = this.categoryService.getCategory(cId);
         return new ResponseEntity<>(this.quizService.getQuizzesByCategory(category), HttpStatus.OK);
     }
+
+    @GetMapping("/active")
+    public ResponseEntity<?> getActiveQuizzes() {
+        return new ResponseEntity<>(this.quizService.getActiveQuizzes(), HttpStatus.OK);
+    }
+
+    @GetMapping("/category/active/{cId}")
+    public ResponseEntity<?> getActiveQuizzesByCategory(@PathVariable("cId") long cId) {
+        Optional<Category> category = this.categoryService.getCategory(cId);
+        return new ResponseEntity<>(this.quizService.getActiveQuizzesByCategory(category), HttpStatus.OK);
+    }
 }
