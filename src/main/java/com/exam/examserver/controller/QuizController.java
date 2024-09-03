@@ -1,5 +1,6 @@
 package com.exam.examserver.controller;
 
+import java.util.Optional;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +16,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.exam.examserver.entity.exam.Category;
 import com.exam.examserver.entity.exam.Question;
 import com.exam.examserver.entity.exam.Quiz;
+import com.exam.examserver.service.CategoryService;
 import com.exam.examserver.service.QuizService;
 
 @RestController
@@ -26,6 +29,9 @@ public class QuizController {
 
     @Autowired
     private QuizService quizService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     //add the quiz
     @PostMapping("/")
@@ -98,5 +104,11 @@ public class QuizController {
     @DeleteMapping("/{quizId}")
     public void deleteQuiz(@PathVariable("quizId") long quizId) {
         this.quizService.deleteQuiz(quizId);
+    }
+
+    @GetMapping("/category/{cId}")
+    public ResponseEntity<?> getQuizzesByCategory(@PathVariable("cId") long cId) {
+        Optional<Category> category = this.categoryService.getCategory(cId);
+        return new ResponseEntity<>(this.quizService.getQuizzesByCategory(category), HttpStatus.OK);
     }
 }

@@ -1,7 +1,10 @@
 package com.exam.examserver.service;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
+import com.exam.examserver.entity.exam.Category;
 import com.exam.examserver.entity.exam.Quiz;
 
 public interface QuizService {
@@ -15,5 +18,7 @@ public interface QuizService {
     public Quiz getQuiz(long id);
 
     public void deleteQuiz(long id);
+
+    public List<Quiz> getQuizzesByCategory(Optional<Category> category);
 
 }
