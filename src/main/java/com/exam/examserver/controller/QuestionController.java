@@ -2,6 +2,7 @@ package com.exam.examserver.controller;
 
 import java.util.*;
 
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,5 +81,32 @@ public class QuestionController {
     @DeleteMapping("/{questionId}")
     public void deleteQuestion(@PathVariable("questionId") long questionId){
         this.questionService.deleteQuestion(questionId);
+    }
+
+    //evaluate a questions of quiz
+    @PostMapping("/eval-quiz")
+    public ResponseEntity<?> evalQuiz(@RequestBody List<Question> questions){
+        //System.out.println(questions);
+        double marksObtained = 0;
+
+        int correctAnswers = 0;
+
+        int attempted = 0;
+
+        for(Question q: questions){
+            // System.out.println(q.getSelectedAnswer());
+            Question question = this.questionService.getQuestion(q.getQuestionId());
+            if(question.getAnswer().equals(q.getSelectedAnswer())){
+                correctAnswers++;
+            }
+            if (q.getSelectedAnswer() != null) {
+                attempted++;
+            }
+            double singleMarks = Double.parseDouble(questions.get(0).getQuiz().getMaxMarks()) / questions.size();
+            marksObtained = correctAnswers * singleMarks;
+        }
+
+        Map<String, Object> map = Map.of("marksObtained", marksObtained, "correctAnswers", correctAnswers, "attempted", attempted);
+        return ResponseEntity.ok(map);
     }
 }

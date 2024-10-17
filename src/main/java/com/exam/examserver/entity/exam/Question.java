@@ -1,5 +1,6 @@
 package com.exam.examserver.entity.exam;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
@@ -10,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "question")
@@ -37,7 +39,11 @@ public class Question {
     private String option4;
 
     @Column(length = 2400)
+    @JsonIgnore
     private String answer;
+
+    @Transient
+    private String selectedAnswer;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties("questions")
@@ -127,6 +133,14 @@ public class Question {
 
     public void setQuiz(Quiz quiz) {
         this.quiz = quiz;
+    }
+
+    public String getSelectedAnswer() {
+        return selectedAnswer;
+    }
+
+    public void setSelectedAnswer(String selectedAnswer) {
+        this.selectedAnswer = selectedAnswer;
     }
 
     
