@@ -2,6 +2,7 @@ package com.exam.examserver.entity.exam;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -39,7 +40,6 @@ public class Question {
     private String option4;
 
     @Column(length = 2400)
-    @JsonIgnore
     private String answer;
 
     @Transient
@@ -119,10 +119,12 @@ public class Question {
         this.option4 = option4;
     }
 
+    @JsonIgnore
     public String getAnswer() {
         return answer;
     }
 
+    @JsonProperty("answer")
     public void setAnswer(String answer) {
         this.answer = answer;
     }
